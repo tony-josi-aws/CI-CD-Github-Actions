@@ -32,7 +32,7 @@ runs:
   using: "composite"
   steps:
     - name: Checkout the repo for generating doxygen
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4.1.1
       with:
         path: doxygen_source
         ref: ${{ inputs.ref }}
@@ -51,7 +51,7 @@ runs:
       run: ${{ inputs.generate_command }}
 
     - name: Checkout the repo for storing doxygen
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4.1.1
       with:
         path: doxygen_store
 
@@ -107,8 +107,7 @@ runs:
       run: |
         jq '.releases|=if index("${{ inputs.ref }}") then . else ["${{ inputs.ref }}"]+. end' _data/doc_config.json > tmp.json
         mv tmp.json _data/doc_config.json
-        rm -f latest
-        ln -s "${{ inputs.ref }}" latest
+        mv "${{ inputs.ref }}" latest
 
     - name: Commit new doxygen
       working-directory: ./doxygen_store
